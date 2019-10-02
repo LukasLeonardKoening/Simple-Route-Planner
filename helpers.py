@@ -1,10 +1,9 @@
 import networkx as nx
 import pickle
-import plotly.plotly as py
+import chart_studio.plotly as py
 import random
-from plotly.graph_objs import *
-from plotly.offline import init_notebook_mode, plot, iplot
-init_notebook_mode(connected=True)
+from plotly.graph_objects import *
+#from plotly.offline import init_notebook_mode, plot, iplot
 
 
 map_10_dict = {
@@ -94,8 +93,8 @@ def show_map(M, start=None, goal=None, path=None):
     G = M._graph
     pos = nx.get_node_attributes(G, 'pos')
     edge_trace = Scatter(
-    x=[],
-    y=[],
+    x=list([]),
+    y=list([]),
     line=Line(width=0.5,color='#888'),
     hoverinfo='none',
     mode='lines')
@@ -103,12 +102,21 @@ def show_map(M, start=None, goal=None, path=None):
     for edge in G.edges():
         x0, y0 = G.node[edge[0]]['pos']
         x1, y1 = G.node[edge[1]]['pos']
-        edge_trace['x'] += [x0, x1, None]
-        edge_trace['y'] += [y0, y1, None]
+        edge_trace['x'] += (x0, x1, None)
+        edge_trace['y'] += (y0, y1, None)
+	
+    x_list = list()
+    y_list = list()
+
+    for node in G.nodes():
+        x, y = G.node[node]['pos']
+        x_list.append(x)
+        y_list.append(y)
+
 
     node_trace = Scatter(
-        x=[],
-        y=[],
+        x=x_list,
+        y=y_list,
         text=[],
         mode='markers',
         hoverinfo='text',
@@ -128,12 +136,9 @@ def show_map(M, start=None, goal=None, path=None):
                 titleside='right'
             ),
             line=dict(width=2)))
-    for node in G.nodes():
-        x, y = G.node[node]['pos']
-        node_trace['x'].append(x)
-        node_trace['y'].append(y)
+    
 
-    for node, adjacencies in enumerate(G.adjacency_list()):
+    for node, adjacencies in enumerate(G.adjacency()):
         color = 0
         if path and node in path:
             color = 2
@@ -142,9 +147,9 @@ def show_map(M, start=None, goal=None, path=None):
         elif node == goal:
             color = 1
         # node_trace['marker']['color'].append(len(adjacencies))
-        node_trace['marker']['color'].append(color)
+        list(node_trace['marker']['color']).append(color)
         node_info = "Intersection " + str(node)
-        node_trace['text'].append(node_info)
+        list(node_trace['text']).append(node_info)
 
     fig = Figure(data=Data([edge_trace, node_trace]),
                  layout=Layout(
@@ -157,4 +162,4 @@ def show_map(M, start=None, goal=None, path=None):
                     xaxis=XAxis(showgrid=False, zeroline=False, showticklabels=False),
                     yaxis=YAxis(showgrid=False, zeroline=False, showticklabels=False)))
 
-    iplot(fig)
+    fig.show()
