@@ -183,4 +183,4 @@ class PathPlanner():
 start = 1
 goal = 8
 
-show_map(map_40, start=start, goal=goal, path=PathPlanner(map_40, start, goal).path)
+show_map(load_map_40(), start=start, goal=goal, path=PathPlanner(load_map_40(), start, goal).path)
