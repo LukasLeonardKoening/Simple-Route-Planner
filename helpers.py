@@ -106,36 +106,13 @@ def show_map(M, start=None, goal=None, path=None):
 	
     x_list = list()
     y_list = list()
+    color_list = list()
+    text_list = list()
 
     for node in G.nodes():
         x, y = G.node[node]['pos']
         x_list.append(x)
         y_list.append(y)
-
-
-    node_trace = Scatter(
-        x=x_list,
-        y=y_list,
-        text=[],
-        mode='markers',
-        hoverinfo='text',
-        marker=Marker(
-            showscale=False,
-            # colorscale options
-            # 'Greys' | 'Greens' | 'Bluered' | 'Hot' | 'Picnic' | 'Portland' |
-            # Jet' | 'RdBu' | 'Blackbody' | 'Earth' | 'Electric' | 'YIOrRd' | 'YIGnBu'
-            colorscale='Hot',
-            reversescale=True,
-            color=[],
-            size=10,
-            colorbar=dict(
-                thickness=15,
-                title='Node Connections',
-                xanchor='left',
-                titleside='right'
-            ),
-            line=dict(width=2)))
-    
 
     for node, adjacencies in enumerate(G.adjacency()):
         color = 0
@@ -146,9 +123,33 @@ def show_map(M, start=None, goal=None, path=None):
         elif node == goal:
             color = 1
         # node_trace['marker']['color'].append(len(adjacencies))
-        list(node_trace['marker']['color']).append(color)
+        color_list.append(color)
         node_info = "Intersection " + str(node)
-        list(node_trace['text']).append(node_info)
+        text_list.append(node_info)
+
+
+    node_trace = Scatter(
+        x=x_list,
+        y=y_list,
+        text=text_list,
+        mode='markers',
+        hoverinfo='text',
+        marker=Marker(
+            showscale=False,
+            # colorscale options
+            # 'Greys' | 'Greens' | 'Bluered' | 'Hot' | 'Picnic' | 'Portland' |
+            # Jet' | 'RdBu' | 'Blackbody' | 'Earth' | 'Electric' | 'YIOrRd' | 'YIGnBu'
+            colorscale='Hot',
+            reversescale=True,
+            color=color_list,
+            size=10,
+            colorbar=dict(
+                thickness=15,
+                title='Node Connections',
+                xanchor='left',
+                titleside='right'
+            ),
+            line=dict(width=2)))
 
     fig = Figure(data=Data([edge_trace, node_trace]),
                  layout=Layout(
