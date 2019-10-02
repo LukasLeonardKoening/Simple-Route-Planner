@@ -3,7 +3,6 @@ import pickle
 import chart_studio.plotly as py
 import random
 from plotly.graph_objects import *
-#from plotly.offline import init_notebook_mode, plot, iplot
 
 
 map_10_dict = {
