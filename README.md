@@ -15,4 +15,4 @@ Just change the start and goal value at the bottom of the planer.py script and r
 
 Results will look like this:
 
-![GitHub Logo](/images/logo.png)
+![GitHub Logo](/Example.png)
